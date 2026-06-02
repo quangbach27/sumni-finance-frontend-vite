@@ -45,8 +45,11 @@ export default defineConfig([
           ],
           pathGroups: [
             { pattern: 'react', group: 'builtin', position: 'before' },
+            { pattern: 'react/**', group: 'builtin', position: 'before' },
+            { pattern: 'react-*/**', group: 'builtin', position: 'before' },
             { pattern: 'react-*', group: 'builtin', position: 'before' },
             { pattern: 'next/**', group: 'builtin', position: 'before' },
+            { pattern: '@/shadcn/**', group: 'internal', position: 'before' },
             { pattern: '@/**', group: 'internal', position: 'after' },
           ],
           pathGroupsExcludedImportTypes: ['builtin'],
