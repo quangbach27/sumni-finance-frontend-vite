@@ -7,7 +7,7 @@ import { defineConfig, globalIgnores } from 'eslint/config';
 import importPlugin from 'eslint-plugin-import-x';
 
 export default defineConfig([
-  globalIgnores(['dist']),
+  globalIgnores(['dist', 'src/shadcn']),
   {
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
