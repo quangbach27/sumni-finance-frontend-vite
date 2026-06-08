@@ -1,15 +1,8 @@
 name: Commit Stage
 on:
-  pull_request:
+  push:
     branches:
       - main
-      - develop
-    types:
-      - opened
-      - reopened
-      - synchronize
-      - ready_for_review
-
 env: 
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
@@ -19,7 +12,6 @@ jobs:
   build:
     name: Build and Test
     runs-on: ubuntu-24.04
-    if: github.event.pull_request.draft == false
     permissions:
       contents: read
       security-events: write
@@ -92,3 +84,14 @@ jobs:
           docker tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }} \
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
           docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+  
+  trigger-acceptance:
+    name: Trigger Acceptance Stage
+    needs: [package]
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Dispatch to acceptance stage
+        uses: peter-evans/repository-dispatch@v4
+        with:
+          event-type: acceptance-stage
+          client-payload: '{"image_tag": "${{ github.sha }}"}'
